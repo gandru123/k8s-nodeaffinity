@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-affinity-deploy
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hospital-backend
+  template:
+    metadata:
+      labels:
+        app: hospital-backend
+    spec:
+      affinity:
+        #nodeAffinity
+        #podAntiAffinity
+        podAffinity:
+          requiredDuringSchedulingIgnoreDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: hospital-forntend
+              topologyKey: topology.kubernetes.io/zone
+      containers:
+        - name: imagename
+          image: ingress:green
+          ports:
+            - containerPort: 80
+
